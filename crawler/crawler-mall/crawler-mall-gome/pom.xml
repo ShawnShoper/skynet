@@ -10,5 +10,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>crawler-mall-gome</artifactId>
+    <description>crawler of gome</description>
 
+
+    <dependencies>
+
+    </dependencies>
+
+    <build>
+
+    </build>
 </project>
