@@ -3,18 +3,12 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>crawler</artifactId>
+        <artifactId>crawler-mall</artifactId>
         <groupId>org.skynet</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>crawler-mall</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>crawler-mall-jd</module>
-        <module>crawler-mall-gome</module>
-    </modules>
-
+    <artifactId>crawler-mall-gome</artifactId>
 
 </project>

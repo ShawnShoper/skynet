@@ -21,7 +21,6 @@
         </plugins>
     </build>
     <modules>
-        <module>mall</module>
         <module>crawler</module>
     </modules>
 
