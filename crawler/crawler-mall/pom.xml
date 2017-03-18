@@ -15,5 +15,11 @@
         <module>crawler-mall-gome</module>
     </modules>
 
+    <dependencies>
+        <dependency>
+            <groupId></groupId>
+            <artifactId>http-too</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>
