@@ -34,7 +34,6 @@
     </build>
     <modules>
         <module>crawler</module>
-        <module>crawler</module>
     </modules>
 
 </project>
