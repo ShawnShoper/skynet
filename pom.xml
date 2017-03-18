@@ -6,6 +6,7 @@
 
     <groupId>org.skynet</groupId>
     <artifactId>skynet</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <build>
         <plugins>
@@ -19,5 +20,9 @@
             </plugin>
         </plugins>
     </build>
+    <modules>
+        <module>mall</module>
+        <module>crawler</module>
+    </modules>
 
 </project>
