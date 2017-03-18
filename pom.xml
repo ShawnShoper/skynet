@@ -8,6 +8,18 @@
     <artifactId>skynet</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <repositories>
+        <repository>
+            <id>shawnshoper</id>
+            <url>http://nexus.shawnshoper.org/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
     <build>
         <plugins>
             <plugin>
@@ -21,7 +33,7 @@
         </plugins>
     </build>
     <modules>
-        <module>mall</module>
+        <module>crawler</module>
         <module>crawler</module>
     </modules>
 
