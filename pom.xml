@@ -18,7 +18,7 @@
                 <role>leader</role>
                 <role>developer</role>
             </roles>
-            <qq>369201170</qq>
+            <email>xiehao3692@vip.qq.com</email>
             <timezone>8</timezone>
         </developer>
         <developer>
@@ -27,7 +27,7 @@
             <roles>
                 <role>developer</role>
             </roles>
-            <qq>826322915</qq>
+            <email>826322915@qq.com</email>
             <timezone>8</timezone>
         </developer>
     </developers>
