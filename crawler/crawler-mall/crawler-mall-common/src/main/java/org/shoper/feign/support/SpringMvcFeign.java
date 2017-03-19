@@ -1,5 +1,11 @@
 package org.shoper.feign.support;
 
+import org.apache.http.config.Registry;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.ssl.SSLContexts;
 import org.shoper.feign.annotation.Api;
 import org.shoper.feign.message.MessageConverters;
 import feign.Feign;
@@ -12,6 +18,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.springframework.http.converter.HttpMessageConverter;
 
+import javax.net.ssl.SSLContext;
 import java.util.List;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -25,7 +32,7 @@ public class SpringMvcFeign {
 
     private static final int DEFAULT_MAX_CONN = 20;
 
-    private static final int DEFAULT_TIMEOUT= 20000;
+    private static final int DEFAULT_TIMEOUT = 20000;
 
     private static final int DEFAULT_RETRY_COUNT = 5;
 
@@ -82,8 +89,30 @@ public class SpringMvcFeign {
                 .encoder(new SpringEncoder(converters));
     }
 
+    //    public static HttpClient getDefaultHttpClientPool(int maxTotal, int timeout, int retry, boolean keepAlive) {
+//        PoolingHttpClientConnectionManager manager = new PoolingHttpClientConnectionManager();
+//        RequestConfig requestConfig = RequestConfig.custom()
+//                .setConnectTimeout(timeout)
+//                .setSocketTimeout(timeout)
+//                .build();
+//        HttpClientBuilder httpClient = HttpClientBuilder.create()
+//                .setConnectionManager(manager)
+//                .setDefaultRequestConfig(requestConfig)
+//                .setMaxConnPerRoute(maxTotal)
+//                .setMaxConnTotal(maxTotal)
+//                .setRetryHandler(new DefaultHttpRequestRetryHandler(retry, true));
+//        if (keepAlive) {
+//            httpClient.setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy());
+//        }
+//        return httpClient.build();
+//    }
     public static HttpClient getDefaultHttpClientPool(int maxTotal, int timeout, int retry, boolean keepAlive) {
-        PoolingHttpClientConnectionManager manager = new PoolingHttpClientConnectionManager();
+        SSLContext sslContext = SSLContexts.createSystemDefault();
+        Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
+                .register("http", PlainConnectionSocketFactory.INSTANCE)
+                .register("https", new SSLConnectionSocketFactory(sslContext))
+                .build();
+        PoolingHttpClientConnectionManager manager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
         RequestConfig requestConfig = RequestConfig.custom()
                 .setConnectTimeout(timeout)
                 .setSocketTimeout(timeout)
@@ -103,5 +132,4 @@ public class SpringMvcFeign {
     public static List<HttpMessageConverter<?>> getConverters() {
         return converters;
     }
-
 }
