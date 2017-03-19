@@ -1,5 +1,7 @@
 package org.skynet.crawler.common;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Map;
 
 /**
@@ -11,7 +13,7 @@ public interface Crawler {
      * 列表抓取,传入列表页url
      * @param url
      */
-    Map<String,Object> crawlerList(String url,Object... obj);
+    Map<String,Object> crawlerList(String url,Object... obj) throws IOException;
 
     /**
      * 单数据抓取

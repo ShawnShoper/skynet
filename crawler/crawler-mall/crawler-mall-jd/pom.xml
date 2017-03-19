@@ -10,6 +10,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>crawler-mall-jd</artifactId>
-
+    <dependencies>
+        <dependency>
+            <groupId>org.skynet</groupId>
+            <artifactId>crawler-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.skynet</groupId>
+            <artifactId>crawler-mall-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 </project>
