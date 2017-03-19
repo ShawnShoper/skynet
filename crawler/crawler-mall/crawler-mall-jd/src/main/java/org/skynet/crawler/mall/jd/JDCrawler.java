@@ -1,5 +1,7 @@
 package org.skynet.crawler.mall.jd;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.collections.map.HashedMap;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -30,7 +32,7 @@ public class JDCrawler implements Crawler {
     public Map<String, Object> crawlerList(String url, Object... obj) throws IOException {
         Document listDoc = Jsoup.parse(new URL(url), timeout);
         Elements items = listDoc.getElementsByClass("gl-item");
-        items.stream().parallel().map(e ->
+        items.stream().map(e ->
                 "http:" + e.getElementsByTag("a").attr("href")
         ).map(link -> {
             int ind = link.indexOf("?");
@@ -60,7 +62,7 @@ public class JDCrawler implements Crawler {
         String title = goodsDoc.getElementsByClass("sku-name").get(0).text();
         data.put("name", title);
         try {
-            crawlerPrice(skuid);
+            data.put("price", crawlerPrice(skuid));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -68,10 +70,11 @@ public class JDCrawler implements Crawler {
     }
 
     private double crawlerPrice(String skuid) throws IOException {
-//        String text = Jsoup.parse(new URL("https://p.3.cn/prices/mgets?type=1&area=2_2815_51975_0&skuIds=J_" + skuid), timeout).text();
-        Price target = SpringMvcFeign.target(Price.class, "https://p.3.cn/prices/mgets");
-        String price = target.getPrice("J_" + skuid, "2_2815_51975_0", "1");
-        System.out.println(price);
-        return 0.0d;
+        Price target = SpringMvcFeign.target(Price.class, "https://p.3.cn/",10,timeout);
+        skuid = "J_" + skuid;
+        String price = target.getPrice(skuid,"2_2815_51975_0", "1");
+        ObjectMapper objectMapper = new ObjectMapper();
+        double p = objectMapper.readTree(price).get(0).get("p").asDouble();
+        return p;
     }
 }
