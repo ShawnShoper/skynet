@@ -13,13 +13,7 @@
     <modules>
         <module>crawler-mall-jd</module>
         <module>crawler-mall-gome</module>
+        <module>crawler-mall-common</module>
     </modules>
-
-    <dependencies>
-        <dependency>
-            <groupId></groupId>
-            <artifactId>http-too</artifactId>
-        </dependency>
-    </dependencies>
 
 </project>
