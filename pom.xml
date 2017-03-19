@@ -36,7 +36,7 @@
     <repositories>
         <repository>
             <id>shawnshoper</id>
-            <url>http://nexus.shawnshoper.org/content/groups/public/</url>
+            <url>http://nexus.shawnshoper.org/content/repositories/snapshots/</url>
             <releases>
                 <enabled>false</enabled>
             </releases>
