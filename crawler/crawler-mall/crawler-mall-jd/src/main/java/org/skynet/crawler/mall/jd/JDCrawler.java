@@ -25,11 +25,11 @@ public class JDCrawler implements Crawler {
     public LinkedBlockingDeque<Map<String, Object>> datas = new LinkedBlockingDeque<>();
 
     public static void main(String[] args) throws IOException {
-        new JDCrawler().crawlerList("https://list.jd.com/list.html?cat=9987,653,655");
+        new JDCrawler().crawlerList("https://list.jd.com/list.html?cat=9987,653,655", "digit", "phone", null);
     }
 
     @Override
-    public Map<String, Object> crawlerList(String url, Object... obj) throws IOException {
+    public Map<String, Object> crawlerList(String url, String cat1, String cat2, Map<String, String> other) throws IOException {
         Document listDoc = Jsoup.parse(new URL(url), timeout);
         Elements items = listDoc.getElementsByClass("gl-item");
         items.stream().map(e ->
@@ -40,13 +40,13 @@ public class JDCrawler implements Crawler {
                 link = link.substring(0, ind);
             return link;
         })
-                .map(this::crawler)
+                .map(e -> this.crawler(e, cat1, cat2, other))
                 .forEach(System.out::println);
         return null;
     }
 
     @Override
-    public Map<String, Object> crawler(String url, Object... obj) {
+    public Map<String, Object> crawler(String url, String cat1, String cat2, Map<String, String> other) {
         //价格接口
         //https://p.3.cn/prices/mgets?type=1&area=2_2815_51975_0&skuIds=J_2967929
         Map<String, Object> data = new HashedMap();
@@ -70,9 +70,9 @@ public class JDCrawler implements Crawler {
     }
 
     private double crawlerPrice(String skuid) throws IOException {
-        Price target = SpringMvcFeign.target(Price.class, "https://p.3.cn/",10,timeout);
+        Price target = SpringMvcFeign.target(Price.class, "https://p.3.cn/", 10, timeout);
         skuid = "J_" + skuid;
-        String price = target.getPrice(skuid,"2_2815_51975_0", "1");
+        String price = target.getPrice(skuid, "2_2815_51975_0", "1");
         ObjectMapper objectMapper = new ObjectMapper();
         double p = objectMapper.readTree(price).get(0).get("p").asDouble();
         return p;
