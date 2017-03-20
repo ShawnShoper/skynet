@@ -14,6 +14,7 @@
         <module>crawler-mall-jd</module>
         <module>crawler-mall-gome</module>
         <module>crawler-mall-common</module>
+        <module>crawler-mall-suning</module>
     </modules>
 
 </project>
