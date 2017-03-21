@@ -11,13 +11,15 @@ import java.util.Map;
 public interface Crawler {
     /**
      * 列表抓取,传入列表页url
+     *
      * @param url
      */
-    Map<String,Object> crawlerList(String url,Object... obj) throws IOException;
+    Map<String, Object> crawlerList(String url, String cat1, String cat2, Map<String, String> other) throws IOException;
 
     /**
      * 单数据抓取
+     *
      * @param url
      */
-    Map<String,Object> crawler(String url,Object... obj);
+    Map<String, Object> crawler(String url, String cat1, String cat2, Map<String, String> other);
 }
