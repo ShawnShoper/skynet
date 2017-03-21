@@ -1,5 +1,7 @@
 import org.junit.Test;
-import org.skynet.crawler.mail.suning.SNCrawler;
+import org.skynet.crawler.mall.suning.SNCrawler;
+
+import java.io.IOException;
 
 /**
  * @author zhangxuh
@@ -9,6 +11,15 @@ import org.skynet.crawler.mail.suning.SNCrawler;
 public class CrawlerTest {
     @Test
     public void testSN(){
-        new SNCrawler().crawler("");
+        try {
+            SNCrawler snCrawler=new SNCrawler("D:/test/crawler/sn/");
+            snCrawler.setThreads(100);
+            snCrawler.start(1);
+            snCrawler.visitAndGetNextLinks("http://shouji.suning.com/");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
