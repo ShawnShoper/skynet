@@ -30,6 +30,16 @@ public class Product {
      */
     private double price;
 
+    /**
+     * 产品价格获取url
+     */
+    private double priceUrl;
+
+    /**
+     *
+     */
+    private String cityCode;
+
 
     public String getPid() {
         return pid;
@@ -70,5 +80,21 @@ public class Product {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public double getPriceUrl() {
+        return priceUrl;
+    }
+
+    public void setPriceUrl(double priceUrl) {
+        this.priceUrl = priceUrl;
+    }
+
+    public String getCityCode() {
+        return cityCode;
+    }
+
+    public void setCityCode(String cityCode) {
+        this.cityCode = cityCode;
     }
 }

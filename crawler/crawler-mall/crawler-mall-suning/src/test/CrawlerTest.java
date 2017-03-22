@@ -12,13 +12,8 @@ public class CrawlerTest {
     @Test
     public void testSN(){
         try {
-            SNCrawler snCrawler=new SNCrawler("D:/test/crawler/sn/");
-            snCrawler.setThreads(100);
-            snCrawler.start(1);
-            snCrawler.visitAndGetNextLinks("http://shouji.suning.com/");
+            new SNCrawler().crawlerList("http://list.suning.com/0-20006-1.html", null, null, null);
         } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
             e.printStackTrace();
         }
     }
