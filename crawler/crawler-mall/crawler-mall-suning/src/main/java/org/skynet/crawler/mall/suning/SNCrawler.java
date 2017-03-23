@@ -35,16 +35,23 @@ public class SNCrawler implements Crawler {
         String cityCode="9017";
         List<Product> products=new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
-            String proName=items.get(i).select("p.sell-point a").html().replaceAll("<.+.?>","");;
+            String proName=items.get(i).select("p.sell-point a").html().replaceAll("<.+.?>", "");;
             String pId=items.get(i).select("em[datasku]").attr("datasku");
-//            if(items.get(i).getElementsByClass("no-goods").size()>0) continue;
+            String detailUrl="http:"+items.get(i).select("div.img-block a").attr("href");
+            String pic="http:"+items.get(i).select("div.img-block a img").attr("src2");
+            String vendor=items.get(i).select("p.seller").attr("salesname");
+
             Product product=new Product();
-            product.setPid(pId);
             product.setCityCode(cityCode);
+            product.setPid(pId);
+            product.setDetailUrl(detailUrl);
+            product.setPicUrls(pic);
             product.setName(proName);
+            product.setVendor(vendor);
+            product.setPriceUrl(getPriceUrl(product));
+            product.setPrice((Double) crawler(product.getPriceUrl(), null, null, null).get("price"));
             products.add(product);
-            System.err.print("proName : " + proName);
-            crawler(getPriceUrl(product),null,null,null);
+           products.stream().forEach(pro -> System.out.println(JSONObject.toJSONString(pro)));
         }
         return null;
     }
@@ -56,8 +63,8 @@ public class SNCrawler implements Crawler {
         try {
             goodsDoc =  Jsoup.connect(url).userAgent(userAgent).ignoreContentType(true).get();
             JSONObject jsonObject = JSONObject.parseObject(goodsDoc.body().html().substring(goodsDoc.body().html().indexOf("(") + 1, goodsDoc.body().html().length() - 2).replaceAll("&quot;", "\"")).getJSONArray("rs").getJSONObject(0);
-            data.put("price", jsonObject.getString("price") == null || jsonObject.getString("price").equals("") ? -1 : jsonObject.getDoubleValue("price"));
-            System.err.println("  price : " + data.get("price"));
+            double price=jsonObject.getString("price") == null || jsonObject.getString("price").equals("") ? -1 : jsonObject.getDoubleValue("price");
+            data.put("price", price);
         } catch (IOException e) {
             e.printStackTrace();
         }
