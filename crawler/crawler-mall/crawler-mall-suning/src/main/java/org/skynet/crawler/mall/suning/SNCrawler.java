@@ -1,19 +1,19 @@
 package org.skynet.crawler.mall.suning;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.collections.map.HashedMap;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.skynet.crawler.common.Crawler;
-import org.skynet.crawler.mall.suning.bean.Product;
+import org.skynet.crawler.mall.suning.bean.Commodity;
+import org.skynet.crawler.mall.suning.bean.Review;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +33,7 @@ public class SNCrawler implements Crawler {
         Elements items = listDoc.select("div#filter-results ul li");
 //        String cityCode=listDoc.getElementById("citybName").attr("role").split(",")[1];
         String cityCode="9017";
-        List<Product> products=new ArrayList<>();
+        List<Commodity> commodities =new ArrayList<>();
         for (int i = 0; i < items.size(); i++) {
             String proName=items.get(i).select("p.sell-point a").html().replaceAll("<.+.?>", "");;
             String pId=items.get(i).select("em[datasku]").attr("datasku");
@@ -41,17 +41,17 @@ public class SNCrawler implements Crawler {
             String pic="http:"+items.get(i).select("div.img-block a img").attr("src2");
             String vendor=items.get(i).select("p.seller").attr("salesname");
 
-            Product product=new Product();
-            product.setCityCode(cityCode);
-            product.setPid(pId);
-            product.setDetailUrl(detailUrl);
-            product.setPicUrls(pic);
-            product.setName(proName);
-            product.setVendor(vendor);
-            product.setPriceUrl(getPriceUrl(product));
-            product.setPrice((Double) crawler(product.getPriceUrl(), null, null, null).get("price"));
-            products.add(product);
-           products.stream().forEach(pro -> System.out.println(JSONObject.toJSONString(pro)));
+            Commodity commodity =new Commodity();
+            commodity.setCityCode(cityCode);
+            commodity.setPid(pId);
+            commodity.setDetailUrl(detailUrl);
+            commodity.setPicUrls(pic);
+            commodity.setName(proName);
+            commodity.setVendor(vendor);
+            commodity.setPriceUrl(getPriceUrl(commodity));
+            commodity.setPrice((Double) crawler(commodity.getPriceUrl(), null, null, null).get("price"));
+            commodities.add(commodity);
+           commodities.stream().forEach(pro -> System.out.println(JSONObject.toJSONString(pro)));
         }
         return null;
     }
@@ -71,8 +71,31 @@ public class SNCrawler implements Crawler {
         return data;
     }
 
-    public  String getPriceUrl( Product product){
-        String[] x=product.getPid().split("\\|");
-        return  "http://ds.suning.cn/ds/prices/"+"000000000"+x[0]+"-"+product.getCityCode()+"-"+x[x.length-1]+"-2-SES.priceCenterShow.priceCenterCallBack.jsonp";
+    public  String getPriceUrl( Commodity commodity){
+        String[] x= commodity.getPid().split("\\|");
+        return  "http://ds.suning.cn/ds/prices/"+"000000000"+x[0]+"-"+ commodity.getCityCode()+"-"+x[x.length-1]+"-2-SES.priceCenterShow.priceCenterCallBack.jsonp";
     }
+
+    public  void getReview( String pid){
+        String[] x= pid.split("\\|");
+        int page=1;
+        String reviewUrl="http://review.suning.com/ajax/review_lists/general-000000000"+x[0]+"-"+x[x.length-1]+"-total-"+page+"-default-1-----reviewList.htm?callback=reviewList";
+        String reviewsStr=null;
+        try {
+            reviewsStr =  Jsoup.connect(reviewUrl).userAgent(userAgent).ignoreContentType(true).execute().body();
+            JSONObject jsonObject=JSONObject.parseObject(reviewsStr.substring(reviewsStr.indexOf("(") + 1, reviewsStr.length() - 1));
+            if(jsonObject.getString("commodityReviews")!=null){
+                List<Review> reviewsList= JSON.parseArray(jsonObject.getString("commodityReviews"), Review.class);
+                reviewsList.stream().forEach(review -> {
+                    System.out.println(JSONObject.toJSONString(review));
+                });
+            }else{
+                System.out.println("commodityCode = [" + pid + "] " + jsonObject.getString("returnMsg"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }

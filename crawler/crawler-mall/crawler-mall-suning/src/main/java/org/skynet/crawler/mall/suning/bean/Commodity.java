@@ -6,7 +6,7 @@ package org.skynet.crawler.mall.suning.bean;
  * @email zhangxuh.mvp@qq.com
  * @date 2017/3/20
  */
-public class Product {
+public class Commodity {
     /**
      * 产品ID
      */

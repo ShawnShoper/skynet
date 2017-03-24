@@ -17,4 +17,8 @@ public class CrawlerTest {
             e.printStackTrace();
         }
     }
+    @Test
+    public void testSNReview(){
+        new SNCrawler().getReview("191502813|||||0070129296");
+    }
 }
