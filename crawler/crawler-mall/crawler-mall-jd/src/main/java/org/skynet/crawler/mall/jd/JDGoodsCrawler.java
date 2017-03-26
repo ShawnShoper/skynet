@@ -1,16 +1,15 @@
 package org.skynet.crawler.mall.jd;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.collections.map.HashedMap;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.shoper.feign.support.SpringMvcFeign;
 import org.skynet.crawler.common.Crawler;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 import java.util.Objects;
@@ -20,12 +19,13 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Shoper on 2017/3/19.
  */
-public class JDCrawler implements Crawler {
+public class JDGoodsCrawler implements Crawler {
     final int timeout = (int) TimeUnit.SECONDS.toMillis(20);
     public LinkedBlockingDeque<Map<String, Object>> datas = new LinkedBlockingDeque<>();
 
     public static void main(String[] args) throws IOException {
-        new JDCrawler().crawlerList("https://list.jd.com/list.html?cat=9987,653,655", "digit", "phone", null);
+        new JDGoodsCrawler().crawlerList("https://list.jd.com/list.html?cat=9987,653,655", "digit", "phone", null);
+//        System.out.println(System.currentTimeMillis());
     }
 
     @Override
@@ -61,20 +61,25 @@ public class JDCrawler implements Crawler {
         if (Objects.isNull(goodsDoc)) return data;
         String title = goodsDoc.getElementsByClass("sku-name").get(0).text();
         data.put("name", title);
+        //商品价格单独获取，避免价格接口导致商品信息效率过低
+        //获取详情信息
+        Element ptable = goodsDoc.getElementsByClass("Ptable").get(0);
         try {
-            data.put("price", crawlerPrice(skuid));
-        } catch (IOException e) {
+            Class aClass =  Class.forName("org.skynet.crawler.mall.jd.digit.Phone");
+            Detail o = (Detail) aClass.newInstance();
+            o.crawler(ptable);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return data;
     }
 
-    private double crawlerPrice(String skuid) throws IOException {
-        Price target = SpringMvcFeign.target(Price.class, "https://p.3.cn/", 10, timeout);
-        skuid = "J_" + skuid;
-        String price = target.getPrice(skuid, "2_2815_51975_0", "1");
-        ObjectMapper objectMapper = new ObjectMapper();
-        double p = objectMapper.readTree(price).get(0).get("p").asDouble();
-        return p;
-    }
+//    private double crawlerPrice(String skuid) throws IOException {
+//        Price target = SpringMvcFeign.target(Price.class, "https://p.3.cn/", 10, timeout);
+//        skuid = "J_" + skuid;
+//        String price = target.getPrice(skuid, "2_2815_51975_0", "1",System.currentTimeMillis());
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        double p = objectMapper.readTree(price).get(0).get("p").asDouble();
+//        return p;
+//    }
 }
