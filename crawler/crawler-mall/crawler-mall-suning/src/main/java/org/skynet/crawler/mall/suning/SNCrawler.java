@@ -1,10 +1,7 @@
 package org.skynet.crawler.mall.suning;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.collections.map.HashedMap;
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -14,6 +11,7 @@ import org.skynet.crawler.mall.suning.bean.Review;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -58,7 +56,7 @@ public class SNCrawler implements Crawler {
 
     @Override
     public Map<String, Object> crawler(String url, String cat1, String cat2, Map<String, String> other) {
-        Map<String, Object> data = new HashedMap();
+        Map<String, Object> data = new HashMap<>();
         Document goodsDoc = null;
         try {
             goodsDoc =  Jsoup.connect(url).userAgent(userAgent).ignoreContentType(true).get();
