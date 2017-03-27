@@ -1,12 +1,10 @@
 package org.skynet.crawler.mall.jd;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.collections.map.HashedMap;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.shoper.feign.support.SpringMvcFeign;
 import org.skynet.crawler.common.Crawler;
 
 import java.io.IOException;
@@ -25,7 +23,7 @@ public class JDGoodsCrawler implements Crawler {
 
     public static void main(String[] args) throws IOException {
         new JDGoodsCrawler().crawlerList("https://list.jd.com/list.html?cat=9987,653,655", "digit", "phone", null);
-//        System.out.println(System.currentTimeMillis());
+        System.out.println(System.currentTimeMillis());
     }
 
     @Override
