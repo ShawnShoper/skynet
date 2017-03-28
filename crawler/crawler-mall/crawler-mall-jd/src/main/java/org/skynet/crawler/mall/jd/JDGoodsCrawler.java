@@ -6,6 +6,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.skynet.crawler.common.Crawler;
+import org.skynet.crawler.common.Detail;
 
 import java.io.IOException;
 import java.net.URL;
@@ -63,9 +64,9 @@ public class JDGoodsCrawler implements Crawler {
         //获取详情信息
         Element ptable = goodsDoc.getElementsByClass("Ptable").get(0);
         try {
-            Class aClass =  Class.forName("org.skynet.crawler.mall.jd.digit.Phone");
+            Class aClass = Class.forName("org.skynet.crawler.mall.jd.digit.Phone");
             Detail o = (Detail) aClass.newInstance();
-            o.crawler(ptable);
+            o.crawler(ptable,url, cat1, cat2);
         } catch (Exception e) {
             e.printStackTrace();
         }
