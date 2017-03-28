@@ -1,13 +1,12 @@
 package org.skynet.crawler.mall.jd;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.collections.map.HashedMap;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.shoper.feign.support.SpringMvcFeign;
 import org.skynet.crawler.common.Crawler;
+import org.skynet.crawler.common.Detail;
 
 import java.io.IOException;
 import java.net.URL;
@@ -25,7 +24,7 @@ public class JDGoodsCrawler implements Crawler {
 
     public static void main(String[] args) throws IOException {
         new JDGoodsCrawler().crawlerList("https://list.jd.com/list.html?cat=9987,653,655", "digit", "phone", null);
-//        System.out.println(System.currentTimeMillis());
+        System.out.println(System.currentTimeMillis());
     }
 
     @Override
@@ -65,21 +64,12 @@ public class JDGoodsCrawler implements Crawler {
         //获取详情信息
         Element ptable = goodsDoc.getElementsByClass("Ptable").get(0);
         try {
-            Class aClass =  Class.forName("org.skynet.crawler.mall.jd.digit.Phone");
+            Class aClass = Class.forName("org.skynet.crawler.mall.jd.digit.Phone");
             Detail o = (Detail) aClass.newInstance();
-            o.crawler(ptable);
+            o.crawler(ptable,url, cat1, cat2);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return data;
     }
-
-//    private double crawlerPrice(String skuid) throws IOException {
-//        Price target = SpringMvcFeign.target(Price.class, "https://p.3.cn/", 10, timeout);
-//        skuid = "J_" + skuid;
-//        String price = target.getPrice(skuid, "2_2815_51975_0", "1",System.currentTimeMillis());
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        double p = objectMapper.readTree(price).get(0).get("p").asDouble();
-//        return p;
-//    }
 }
