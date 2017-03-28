@@ -12,7 +12,8 @@ public class CrawlerTest {
     @Test
     public void testSN(){
         try {
-            new SNCrawler().crawlerList("http://list.suning.com/0-20006-0.html", null, null, null);
+//            new SNCrawler().crawlerList("http://list.suning.com/0-20006-0.html", null, null, null);
+            new SNCrawler().crawlerList("http://list.suning.com/0-232003-0.html", null, null, null);
         } catch (IOException e) {
             e.printStackTrace();
         }
